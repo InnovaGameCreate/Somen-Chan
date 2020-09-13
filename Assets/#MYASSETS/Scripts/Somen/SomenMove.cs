@@ -7,7 +7,7 @@ using UniRx.Triggers;
 
 namespace Assets.Scripts.Somen
 {
-    public class SomeMove : BaseSomen
+    public class SomenMove : BaseSomen
     {
         private const float moveSpeed = 10.0f;           // 横方向の移動速度
         private const float accelationYThreshold = 0.0f; // ゲームスタートのジャイロセンサの閾値
@@ -17,6 +17,7 @@ namespace Assets.Scripts.Somen
             // ゲーム開始時の動き
             InputEvent.MoveDirection
                 .Where(_ => !core.IsAlive.Value)
+                .Where(_ => core.CurrentGameState==GameState.Initialize)
                 .Subscribe(moveDirection =>
                 {
                     if (startGameRoutine == null)
@@ -28,6 +29,7 @@ namespace Assets.Scripts.Somen
             // 左右方向の移動
             InputEvent.MoveDirection
                 .Where(_ => core.IsAlive.Value)
+                .Where(_ => core.CurrentGameState==GameState.Main)
                 .Subscribe(moveDirection =>
                 {
                     var direction = (transform.right * moveDirection.x);
@@ -74,6 +76,7 @@ namespace Assets.Scripts.Somen
                 {
                     core.SwitchIsAlive(true);   // isAliveのフラグ切り替え
                     Move(transform.forward * startForce);   // 前方方向にスタート時に加える
+                    Stop();
                     startGameRoutine = null;
                     yield break;
                 }

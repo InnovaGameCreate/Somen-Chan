@@ -9,9 +9,9 @@ using Assets.Scripts.Manager;
 public class SomenManagerPresenter : MonoBehaviour
 {
     [SerializeField]
-    private GameObject somen;
+    private GameObject somen = default;
     [SerializeField]
-    private MainGameManager Main;
+    private MainGameManager Main = default;
 
     private void Start()
     {

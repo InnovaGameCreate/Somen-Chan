@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using Assets.Scripts.ChopStick;
 
 namespace Assets.Scripts.Somen
 {
@@ -17,7 +18,7 @@ namespace Assets.Scripts.Somen
             // ゲーム開始時の動き
             InputEvent.MoveDirection
                 .Where(_ => !core.IsAlive.Value)
-                .Where(_ => core.CurrentGameState==GameState.Initialize)
+                .Where(_ => core.CurrentGameState == GameState.Initialize)
                 .Subscribe(moveDirection =>
                 {
                     if (startGameRoutine == null)
@@ -29,12 +30,23 @@ namespace Assets.Scripts.Somen
             // 左右方向の移動
             InputEvent.MoveDirection
                 .Where(_ => core.IsAlive.Value)
-                .Where(_ => core.CurrentGameState==GameState.Main)
+                .Where(_ => core.CurrentGameState == GameState.Main)
                 .Subscribe(moveDirection =>
                 {
                     var direction = (transform.right * moveDirection.x);
                     Move(direction * moveSpeed);
                     Stop();
+                });
+
+            // 箸に当たったとき
+            this.OnTriggerEnterAsObservable()
+                .Subscribe(chopStick =>
+                {
+                    var i = chopStick.GetComponent<BaseChopStick>();
+                    if (i != null)
+                    {
+                        i.SwitchOnIsGrab();
+                    }
                 });
         }
 

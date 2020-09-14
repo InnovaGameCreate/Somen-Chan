@@ -62,7 +62,7 @@ namespace Assets.Scripts.Somen
         /// <summary>
         /// RigidBodyの速度を0にする
         /// </summary>
-        private void Stop()
+        public void Stop()
         {
             somenRigidBody.velocity = Vector3.zero;
         }
@@ -86,7 +86,7 @@ namespace Assets.Scripts.Somen
 
                 if (time < elapsedTime)
                 {
-                    core.SwitchIsAlive(true);   // isAliveのフラグ切り替え
+                    core.SetIsAlive(true);   // isAliveのフラグ切り替え
                     Move(transform.up * startForce);   // 前方方向にスタート時に加える
                     Stop();
                     startGameRoutine = null;

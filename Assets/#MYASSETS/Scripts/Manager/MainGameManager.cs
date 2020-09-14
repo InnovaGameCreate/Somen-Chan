@@ -12,8 +12,10 @@ namespace Assets.Scripts.Manager
         // 現在のゲームの状態
         private ReactiveProperty<GameState> currentGameState = new ReactiveProperty<GameState>(GameState.Initialize);
         public IReadOnlyReactiveProperty<GameState> CurrentGameState { get { return currentGameState; } }
-        private bool isGrab = false;    // そうめんが掴まれているかどうか
-        protected bool IsGrab { get { return isGrab; } }
+
+        // ポーズ中かどうか
+        private ReactiveProperty<bool> isPause = new ReactiveProperty<bool>(false);
+        public IReactiveProperty<bool> IsPause { get { return isPause; } }
 
         private StageManager stageManager;
 
@@ -32,12 +34,12 @@ namespace Assets.Scripts.Manager
         }
 
         /// <summary>
-        /// そうめんが掴まれたどうかをセットする
+        /// ポーズ中かどうかを設定する
         /// </summary>
-        /// <param name="isGrab">そうめんが掴まれたどうかの状態</param>
-        public void SetIsGrab(bool isGrab)
+        /// <param name="isPause">ポーズ中かどうか</param>
+        public void SetIsPause(bool isPause)
         {
-            this.isGrab = isGrab;
+            this.isPause.Value = isPause;
         }
     }
 }

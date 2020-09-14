@@ -12,17 +12,27 @@ namespace Assets.Scripts.Somen
         public IReadOnlyReactiveProperty<bool> IsAlive { get { return isAlive; } }
         private GameState currentGameState;
         public GameState CurrentGameState { get { return currentGameState; } }
+        private Vector3 startSomenPositin;
 
         private void Awake()
         {
             currentGameState = GameState.Initialize;
+            startSomenPositin = this.transform.position;
+        }
+
+        /// <summary>
+        /// ソーメンの初期位置に移動
+        /// </summary>
+        public void ResetSomenPosition()
+        {
+            this.transform.position = startSomenPositin;
         }
 
         /// <summary>
         /// isAliveのフラグ切り替えメソッド
         /// </summary>
         /// <param name="value">切り替え先</param>
-        public void SwitchIsAlive(bool value)
+        public void SetIsAlive(bool value)
         {
             isAlive.Value = value;
         }

@@ -21,7 +21,7 @@ public class SomenManagerPresenter : MonoBehaviour
             .Where(isAlive => isAlive)
             .Subscribe(_ =>
             {
-                Main.SetGamaState(GameState.Main);
+                Main.SetGameState(GameState.Main);
             }).AddTo(gameObject);
         
         Main.CurrentGameState

@@ -16,6 +16,7 @@ public class SomenManagerPresenter : MonoBehaviour
     private void Start()
     {
         var core = somen.GetComponent<SomenCore>();
+        var somenMove = somen.GetComponent<SomenMove>();
 
         core.IsAlive
             .Where(isAlive => isAlive)
@@ -23,8 +24,17 @@ public class SomenManagerPresenter : MonoBehaviour
             {
                 Main.SetGameState(GameState.Main);
             }).AddTo(gameObject);
-        
+
         Main.CurrentGameState
-            .Subscribe(state => core.SetGameState(state)).AddTo(gameObject);
+            .Subscribe(state =>
+            {
+                core.SetGameState(state);
+                if (state == GameState.Initialize)
+                {
+                    core.SetIsAlive(false);
+                    somenMove.Stop();
+                    core.ResetSomenPosition();
+                }
+            }).AddTo(gameObject);
     }
 }

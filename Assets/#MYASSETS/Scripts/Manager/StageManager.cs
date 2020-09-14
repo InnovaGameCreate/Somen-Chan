@@ -42,7 +42,7 @@ namespace Assets.Scripts.Manager
 
             // スクロールをする
             this.UpdateAsObservable()
-                .Where(_ => Main.CurrentGameState.Value == GameState.Main)
+                .Where(_ => Main.CurrentGameState.Value == GameState.Main && !Main.IsPause.Value)
                 .Where(_ => !isGrab.Value)
                 .Subscribe(_ =>
                 {
@@ -55,6 +55,7 @@ namespace Assets.Scripts.Manager
         /// </summary>
         private void OnInitializeStageObject()
         {
+            DestroyStageObject();
             CreateStageObject();
         }
 
@@ -92,6 +93,17 @@ namespace Assets.Scripts.Manager
                 {
                     Instantiate(chopsticks, new Vector3(Random.Range(LEFT_RANGE, CENTER), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.0f), Quaternion.Euler(0.0f, 180.0f, 0.0f), stageObject);
                 }
+            }
+        }
+
+        /// <summary>
+        /// ステージオブジェクトをすべて削除
+        /// </summary>
+        private void DestroyStageObject()
+        {
+            foreach (Transform children in stageObject.transform)
+            {
+                Destroy(children.gameObject);
             }
         }
 

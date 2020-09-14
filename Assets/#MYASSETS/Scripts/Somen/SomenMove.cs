@@ -61,7 +61,7 @@ namespace Assets.Scripts.Somen
         private IEnumerator StartGameCoroutine()
         {
             float time = 3.0f;                  // 計測時間
-            float startForce = 100.0f;          // スタート時に加える力
+            float startForce = 50.0f;          // スタート時に加える力
             var elapsedTime = Time.deltaTime;   // 経過時間
             while (true)
             {
@@ -75,7 +75,7 @@ namespace Assets.Scripts.Somen
                 if (time < elapsedTime)
                 {
                     core.SwitchIsAlive(true);   // isAliveのフラグ切り替え
-                    Move(transform.forward * startForce);   // 前方方向にスタート時に加える
+                    Move(transform.up * startForce);   // 前方方向にスタート時に加える
                     Stop();
                     startGameRoutine = null;
                     yield break;

@@ -3,29 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using Assets.Scripts.ChopStick;
 
 namespace Assets.Scripts.Manager
 {
     public class StageManager : BaseManager
     {
         [SerializeField]
+        private Transform stageObject = default;
+        private const float SCROLL_SPEED = 0.03f;
+
+        #region ステージ生成関係
+        [SerializeField]
         private GameObject bamboo = default;
         [SerializeField]
         private GameObject chopsticks = default;
         [SerializeField]
         private int createNum = default;                    //箸と竹を生成する数
-        [SerializeField]
-        private Vector3 createPos = default;                //箸と竹を生成する場所
         private const float BAMBOO_SPAWN_MERGEN = 13.8f;    //竹を生成する間隔
         private const float CHOPSTICK_SPAWN_MERGEN = 6.0f;  //箸を生成する間隔
         private const float RIGHT_RANGE = 1.8f;             //右端までの長さ
         private const float LEFT_RANGE = -1.8f;             //左端までの長さ
         private const float CENTER = 0.0f;                  //中央
         private const float RAMDOM = 2.0f;                  //箸の上下のブレ
+        #endregion
 
-        // void Start()のようなもの
         protected override void OnInitializeManager()
         {
+            var isGrab = stageObject.gameObject.GetComponent<ChopStickProvider>().IsGrab;
+
             // ゲームの状態がInitialize(初期化)のとき実行される
             Main.CurrentGameState
                 .Where(state => state == GameState.Initialize)
@@ -33,33 +39,30 @@ namespace Assets.Scripts.Manager
                 {
                     OnInitializeStageObject();
                 });
+
+            // スクロールをする
+            this.UpdateAsObservable()
+                .Where(_ => Main.CurrentGameState.Value == GameState.Main)
+                .Where(_ => !isGrab.Value)
+                .Subscribe(_ =>
+                {
+                    ScrollStage(SCROLL_SPEED);
+                });
         }
 
-
-
-        // TODO ここでオブジェクト（橋や竹）の配置を決定したい
         /// <summary>
         /// 箸のランダム配置やステージ位置の初期化などを行う
         /// </summary>
         private void OnInitializeStageObject()
         {
-            var prob = 0.5f;
-            Debug.Log("竹を配置");
-            for (int i = 0; i < createNum; i++)
-            {
-                Instantiate(bamboo, createPos + new Vector3(0, i + BAMBOO_SPAWN_MERGEN * i, 0), Quaternion.Euler(-90.0f, 0.0f, 0.0f));
-            }
-            for (int i = 0; i < createNum * 2; i++)
-            {
-                Instantiate(chopsticks, createPos + new Vector3(Random.Range(CENTER, RIGHT_RANGE), i + CHOPSTICK_SPAWN_MERGEN * i + Random.Range(-RAMDOM, RAMDOM), 0), Quaternion.identity);
-                if (spawnProbability(prob) == true)
-                {
-                    Instantiate(chopsticks, createPos + new Vector3(Random.Range(LEFT_RANGE, CENTER), i + CHOPSTICK_SPAWN_MERGEN * i + Random.Range(-RAMDOM, RAMDOM), 0), Quaternion.Euler(0.0f, 180.0f, 0.0f));
-                }
-            }
-
+            CreateStageObject();
         }
 
+        /// <summary>
+        /// 確率を求め，結果を返す
+        /// </summary>
+        /// <param name="prob">確率(float:0-1)</param>
+        /// <returns></returns>
         private bool spawnProbability(float prob)
         {
             if (prob <= Random.Range(0.0f, 1.0f))
@@ -70,7 +73,35 @@ namespace Assets.Scripts.Manager
             {
                 return false;
             }
+        }
 
+        /// <summary>
+        /// ステージを自動生成する
+        /// </summary>
+        private void CreateStageObject()
+        {
+            var prob = 0.5f;
+            for (int i = 0; i < createNum; i++)
+            {
+                Instantiate(bamboo, new Vector3(0, i + BAMBOO_SPAWN_MERGEN * i, 0), Quaternion.Euler(-90.0f, 0.0f, 0.0f), stageObject);
+            }
+            for (int j = 0; j < createNum * 2; j++)
+            {
+                Instantiate(chopsticks, new Vector3(Random.Range(CENTER, RIGHT_RANGE), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.0f), Quaternion.identity, stageObject);
+                if (spawnProbability(prob) == true)
+                {
+                    Instantiate(chopsticks, new Vector3(Random.Range(LEFT_RANGE, CENTER), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.0f), Quaternion.Euler(0.0f, 180.0f, 0.0f), stageObject);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ステージをスクロールする
+        /// </summary>
+        /// <param name="scrollSpeed">スクロールのスピード</param>
+        private void ScrollStage(float scrollSpeed)
+        {
+            stageObject.transform.position -= new Vector3(0.0f, scrollSpeed, 0.0f);
         }
     }
 }

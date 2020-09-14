@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 7126689317032350976}
   - component: {fileID: 7308690536901740474}
   - component: {fileID: 271155509018712250}
+  - component: {fileID: 2955715875232825838}
   m_Layer: 0
   m_Name: Chopsticks 1
   m_TagString: Untagged
@@ -314,6 +315,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2955715875232825838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7614679324460355514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d41b74adc7cf3347863caf7dccafcb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7989892466536317071
 GameObject:
   m_ObjectHideFlags: 0

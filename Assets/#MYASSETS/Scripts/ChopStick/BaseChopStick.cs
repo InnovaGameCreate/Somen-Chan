@@ -16,8 +16,11 @@ namespace Assets.Scripts.ChopStick
         private ReactiveProperty<bool> isGrab = new ReactiveProperty<bool>(false);
         public IReadOnlyReactiveProperty<bool> IsGrab { get { return isGrab; } }
 
+        private ChopStickProvider chopStickProvider;
+
         private void Awake()
         {
+            chopStickProvider = GetComponentInParent<ChopStickProvider>();
             OnInitializeChopStick();
         }
 
@@ -27,6 +30,7 @@ namespace Assets.Scripts.ChopStick
         public void SwitchOnIsGrab()
         {
             isGrab.Value = true;
+            chopStickProvider.SetIsGrab(isGrab.Value);
         }
 
         protected abstract void OnInitializeChopStick();

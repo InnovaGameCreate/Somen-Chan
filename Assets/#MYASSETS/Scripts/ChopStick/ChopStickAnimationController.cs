@@ -10,7 +10,6 @@ namespace Assets.Scripts.ChopStick
     {
         protected override void OnInitializeChopStick()
         {
-            Debug.Log("箸初期化");
             // ソーメンを掴んだとき
             IsGrab
                 .Where(isGrab => isGrab)

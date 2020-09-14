@@ -10,6 +10,8 @@ namespace Assets.Scripts.Manager
         private void Awake()
         {
             Main = GetComponent<MainGameManager>();
+            OnInitializeManager();
+
         }
 
         // 下位クラスのManagerの初期化

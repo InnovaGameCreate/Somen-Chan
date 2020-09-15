@@ -34,6 +34,10 @@ Material:
     - _NormalStrength: 1
     - _Smoothness: 0.701
     - _Strength: 0.98
+    - _XuvShift: 0
+    - _XuvSpeed: 1
+    - _YuvShift: -1
+    - _YuvSpeed: 1
     m_Colors:
     - _Deep_Water_Color: {r: 0, g: 0.30000013, b: 0.8490566, a: 0}
     - _Shallow_Water_Color: {r: 0.4554112, g: 0.64048415, b: 0.8113208, a: 0}

@@ -12,7 +12,10 @@ namespace Assets.Scripts.Somen
     {
         private const float moveSpeed = 10.0f;           // 横方向の移動速度
         private const float accelationYThreshold = 0.0f; // ゲームスタートのジャイロセンサの閾値
+        private Vector3 tmpSomenPosition;
+        private bool isGrabbed = false;
         private Coroutine startGameRoutine = null;
+        private Coroutine grabbedRoutine = null;
         protected override void OnInitialize()
         {
             // ゲーム開始時の動き
@@ -29,7 +32,7 @@ namespace Assets.Scripts.Somen
 
             // 左右方向の移動
             InputEvent.MoveDirection
-                .Where(_ => core.IsAlive.Value)
+                .Where(_ => core.IsAlive.Value && !isGrabbed)
                 .Where(_ => core.CurrentGameState == GameState.Main)
                 .Subscribe(moveDirection =>
                 {
@@ -42,10 +45,24 @@ namespace Assets.Scripts.Somen
             this.OnTriggerEnterAsObservable()
                 .Subscribe(chopStick =>
                 {
-                    var i = chopStick.GetComponent<BaseChopStick>();
+                    var i = chopStick.transform.parent.gameObject
+                                     .transform.parent.gameObject
+                                     .transform.parent.gameObject
+                                     .transform.parent.gameObject
+                                     .transform.parent.gameObject
+                                     .GetComponent<BaseChopStick>();
                     if (i != null)
                     {
-                        i.SwitchOnIsGrab();
+                        i.SwitchOnIsGrab();                         // 掴まれたフラグをオンに
+                        isGrabbed = i.IsGrab.Value;
+                        Stop();                                     // プレイヤーを止まらせる
+                        var chopstickPosition = i.GrabSomen();      // 箸のコライダーを消す&掴まれる
+                        tmpSomenPosition = transform.position;
+                        this.transform.position = new Vector3(chopstickPosition.x, chopstickPosition.y, transform.position.z);
+                        if (grabbedRoutine == null)
+                        {
+                            grabbedRoutine = StartCoroutine(GrabbedCoroutine(i));
+                        }
                     }
                 });
         }
@@ -94,6 +111,19 @@ namespace Assets.Scripts.Somen
                 }
                 yield return null;
             }
+        }
+
+        /// <summary>
+        /// 捕まったときのコルーチン
+        /// </summary>
+        /// <param name="chopStick">箸のインスタンス</param>
+        private IEnumerator GrabbedCoroutine(BaseChopStick chopStick)
+        {
+            yield return new WaitForSeconds(3.0f);
+            this.transform.position = tmpSomenPosition;
+            grabbedRoutine = null;
+            chopStick.SwitchOffIsGrab();
+            isGrabbed = chopStick.IsGrab.Value;
         }
     }
 }

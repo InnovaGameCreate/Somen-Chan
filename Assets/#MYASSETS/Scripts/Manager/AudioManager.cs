@@ -8,10 +8,10 @@ namespace Assets.Scripts.Manager
 {
     public class AudioManager : BaseManager
     {
+
         [SerializeField]
         private float bgmVolume = 0.5f; // BGMの音量
-        [SerializeField]
-        private float seVolume = 0.5f;  // SEの音量
+        AudioSource BGM;
 
         protected override void OnInitializeManager()
         {
@@ -26,8 +26,12 @@ namespace Assets.Scripts.Manager
         /// <summary>
         /// オーディオ関係の初期化
         /// </summary>
+        /// 
+        
         private void OnInitializeAudio()
         {
+            BGM = GetComponent<AudioSource>();
+            BGM.Play(0);
         }
 
         /// <summary>
@@ -39,13 +43,5 @@ namespace Assets.Scripts.Manager
             bgmVolume = value;
         }
 
-        /// <summary>
-        /// SEの音量を設定する
-        /// </summary>
-        /// <param name="value">SEの音量(float:0-1)</param>
-        public void SetSeVolume(float value)
-        {
-            seVolume = value;
-        }
     }
 }

@@ -18,6 +18,9 @@ namespace Assets.Scripts.ChopStick
 
         private ChopStickProvider chopStickProvider;
 
+        [SerializeField]
+        private Collider chopstickCollider = default;
+
         private void Awake()
         {
             chopStickProvider = GetComponentInParent<ChopStickProvider>();
@@ -31,6 +34,33 @@ namespace Assets.Scripts.ChopStick
         {
             isGrab.Value = true;
             chopStickProvider.SetIsGrab(isGrab.Value);
+        }
+
+        /// <summary>
+        /// 掴むフラグをオフに
+        /// </summary>
+        public void SwitchOffIsGrab()
+        {
+            isGrab.Value = false;
+            chopStickProvider.SetIsGrab(isGrab.Value);
+        }
+
+        /// <summary>
+        /// ソーメンを掴む
+        /// </summary>
+        /// <returns>コライダーの位置を返す</returns>
+        public Vector3 GrabSomen()
+        {
+            UnEnableCollider();
+            return chopstickCollider.transform.position;
+        }
+
+        /// <summary>
+        /// コライダーを外す
+        /// </summary>
+        public void UnEnableCollider()
+        {
+            chopstickCollider.enabled = false;
         }
 
         protected abstract void OnInitializeChopStick();

@@ -8,14 +8,23 @@ namespace Assets.Scripts.ChopStick
 {
     public class ChopStickAnimationController : BaseChopStick
     {
+        private Animator animator;
         protected override void OnInitializeChopStick()
         {
+            animator = GetComponent<Animator>();
+
             // ソーメンを掴んだとき
             IsGrab
-                .Where(isGrab => isGrab)
-                .Subscribe(_ =>
+                .Subscribe(isGrab =>
                 {
-                    Debug.Log("衝突");
+                    if (isGrab)
+                    {
+                        animator.SetBool("IsGrab", true);
+                    }
+                    else
+                    {
+                        animator.SetBool("IsGrab", false);
+                    }
                 });
 
             // 箸が壊れたとき

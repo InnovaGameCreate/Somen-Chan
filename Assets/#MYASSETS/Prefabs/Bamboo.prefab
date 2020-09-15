@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7341248790922792055
+--- !u!1 &8871317528924902599
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7974338156416227021}
-  - component: {fileID: 6414623236340275560}
-  - component: {fileID: 9142771860240838050}
+  - component: {fileID: 8094816701183659645}
+  - component: {fileID: 5186259405569294808}
+  - component: {fileID: 6925898761003365650}
   m_Layer: 0
-  m_Name: Bamboo
+  m_Name: Bamboo 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7974338156416227021
+--- !u!4 &8094816701183659645
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7341248790922792055}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.595, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_GameObject: {fileID: 8871317528924902599}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 6.8, z: 0}
+  m_LocalScale: {x: 9, y: 3, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6414623236340275560
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!33 &5186259405569294808
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7341248790922792055}
+  m_GameObject: {fileID: 8871317528924902599}
   m_Mesh: {fileID: 3955531651871782078, guid: 833cf625316664742999eb2b2f5403ea, type: 3}
---- !u!23 &9142771860240838050
+--- !u!23 &6925898761003365650
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7341248790922792055}
+  m_GameObject: {fileID: 8871317528924902599}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1

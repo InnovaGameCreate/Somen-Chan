@@ -7,6 +7,7 @@ using UniRx.Triggers;
 namespace Assets.Scripts.Manager
 {
     [RequireComponent(typeof(StageManager))]
+    [RequireComponent(typeof(AudioManager))]
     public class MainGameManager : MonoBehaviour
     {
         // 現在のゲームの状態

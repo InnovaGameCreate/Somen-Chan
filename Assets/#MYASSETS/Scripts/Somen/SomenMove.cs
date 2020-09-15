@@ -104,7 +104,7 @@ namespace Assets.Scripts.Somen
                 if (time < elapsedTime)
                 {
                     core.SetIsAlive(true);   // isAliveのフラグ切り替え
-                    Move(transform.up * startForce);   // 前方方向にスタート時に加える
+                    Move(transform.forward * startForce);   // 前方方向にスタート時に加える
                     Stop();
                     startGameRoutine = null;
                     yield break;

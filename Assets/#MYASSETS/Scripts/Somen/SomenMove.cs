@@ -14,8 +14,9 @@ namespace Assets.Scripts.Somen
         private const float accelationYThreshold = 0.0f; // ゲームスタートのジャイロセンサの閾値
         private Vector3 tmpSomenPosition;
         private bool isGrabbed = false;
-        private const float LIMIT_MOVE_RIGHT = 1.5f;
-        private const float LIMIT_MOVE_LEFT = -1.5f;
+        public bool IsGrabbed { get { return isGrabbed; } }
+        private const float LIMIT_MOVE_RIGHT = 1.5f;    // 右側の移動限界位置
+        private const float LIMIT_MOVE_LEFT = -1.5f;    // 左側の移動限界位置
         private Coroutine startGameRoutine = null;
         private Coroutine grabbedRoutine = null;
         protected override void OnInitialize()
@@ -48,6 +49,7 @@ namespace Assets.Scripts.Somen
                 .Subscribe(_ =>
                 {
                     ClampSomenPosition();
+                    Debug.Log(isGrabbed);
                 });
 
             // 箸に当たったとき
@@ -138,11 +140,57 @@ namespace Assets.Scripts.Somen
         /// <param name="chopStick">箸のインスタンス</param>
         private IEnumerator GrabbedCoroutine(BaseChopStick chopStick)
         {
-            yield return new WaitForSeconds(3.0f);
-            this.transform.position = tmpSomenPosition;
+            const int TARGET_SHAKE_COUNT = 20;  // シェイクしなければいけない数
+            int shakeCount = 0;                 // シェイクした数
+            const float TIME_LIMIT = 3.0f;             // 残り時間
+            float elapsedTime = Time.deltaTime;   // 経過時間
+            Vector3 prevAcceleration = Vector3.zero;    // 1フレーム前の角速度
+
+            while (elapsedTime < TIME_LIMIT)
+            {
+                elapsedTime += Time.deltaTime;
+                if (CheckShake(InputEvent.MoveDirection.Value, prevAcceleration) == true)
+                {
+                    shakeCount++;
+                }
+                prevAcceleration = InputEvent.MoveDirection.Value;
+
+                // 規定回数のカウントを超えれば抜け出す
+                if (TARGET_SHAKE_COUNT < shakeCount)
+                {
+                    this.transform.position = tmpSomenPosition;
+                    grabbedRoutine = null;
+                    chopStick.SwitchOffIsGrab();
+                    isGrabbed = chopStick.IsGrab.Value;
+                    yield break;
+                }
+                yield return null;
+            }
+            // ここまで来たらゲームオーバー
             grabbedRoutine = null;
-            chopStick.SwitchOffIsGrab();
-            isGrabbed = chopStick.IsGrab.Value;
+            core.SetIsAlive(false);
+            isGrabbed = false;
+        }
+
+        /// <summary>
+        /// シェイクしたか判定する
+        /// </summary>
+        /// <param name="acceleration">今回のフレームの角速度</param>
+        /// <param name="prevAcceleration">1フレーム前の角速度</param>
+        /// <returns>シェイクしたかどうか</returns>
+        private bool CheckShake(Vector3 acceleration, Vector3 prevAcceleration)
+        {
+            var dot = Vector3.Dot(acceleration, prevAcceleration);
+            if (dot < 0)
+            {
+                return true;
+            }
+            else { return false; }
+        }
+
+        public void SetIsGrabbed(bool isGrabbed)
+        {
+            this.isGrabbed = isGrabbed;
         }
     }
 }

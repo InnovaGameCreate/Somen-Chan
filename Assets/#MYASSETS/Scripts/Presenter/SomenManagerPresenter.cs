@@ -25,15 +25,25 @@ public class SomenManagerPresenter : MonoBehaviour
                 Main.SetGameState(GameState.Main);
             }).AddTo(gameObject);
 
+        // ゲームオーバー処理
+        core.IsAlive
+            .Where(isAlive => !isAlive && somenMove.IsGrabbed)
+            .Subscribe(_ =>
+            {
+                Main.SetGameState(GameState.GameOver);
+            }).AddTo(gameObject);
+
         Main.CurrentGameState
             .Subscribe(state =>
             {
                 core.SetGameState(state);
-                if (state == GameState.Initialize)
+                switch (state)
                 {
-                    core.SetIsAlive(false);
-                    somenMove.Stop();
-                    core.ResetSomenPosition();
+                    case GameState.Initialize:
+                        core.SetIsAlive(false);
+                        somenMove.Stop();
+                        core.ResetSomenPosition();
+                        break;
                 }
             }).AddTo(gameObject);
     }

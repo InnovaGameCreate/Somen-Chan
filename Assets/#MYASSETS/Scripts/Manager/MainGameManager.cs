@@ -23,6 +23,8 @@ namespace Assets.Scripts.Manager
         private void Awake()
         {
             stageManager = GetComponent<StageManager>();
+
+            currentGameState.Subscribe(state => Debug.Log(state));
         }
 
         /// <summary>

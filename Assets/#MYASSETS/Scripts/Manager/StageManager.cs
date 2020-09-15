@@ -12,6 +12,7 @@ namespace Assets.Scripts.Manager
         [SerializeField]
         private Transform stageObject = default;
         private const float SCROLL_SPEED = 0.03f;
+        private ChopStickProvider chopStickProvider;
 
         #region ステージ生成関係
         [SerializeField]
@@ -30,20 +31,27 @@ namespace Assets.Scripts.Manager
 
         protected override void OnInitializeManager()
         {
-            var isGrab = stageObject.gameObject.GetComponent<ChopStickProvider>().IsGrab;
+            chopStickProvider = stageObject.gameObject.GetComponent<ChopStickProvider>();
 
             // ゲームの状態がInitialize(初期化)のとき実行される
             Main.CurrentGameState
-                .Where(state => state == GameState.Initialize)
-                .Subscribe(_ =>
+                .Subscribe(state =>
                 {
-                    OnInitializeStageObject();
+                    switch (state)
+                    {
+                        case GameState.Initialize:
+                            OnInitializeStageObject();
+                            break;
+                        case GameState.GameOver:
+                            chopStickProvider.SetIsGrab(false);
+                            break;
+                    }
                 });
 
             // スクロールをする
             this.UpdateAsObservable()
                 .Where(_ => Main.CurrentGameState.Value == GameState.Main && !Main.IsPause.Value)
-                .Where(_ => !isGrab.Value)
+                .Where(_ => !chopStickProvider.IsGrab.Value)
                 .Subscribe(_ =>
                 {
                     ScrollStage(SCROLL_SPEED);

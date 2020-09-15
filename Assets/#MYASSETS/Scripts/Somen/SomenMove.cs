@@ -14,6 +14,8 @@ namespace Assets.Scripts.Somen
         private const float accelationYThreshold = 0.0f; // ゲームスタートのジャイロセンサの閾値
         private Vector3 tmpSomenPosition;
         private bool isGrabbed = false;
+        private const float LIMIT_MOVE_RIGHT = 1.5f;
+        private const float LIMIT_MOVE_LEFT = -1.5f;
         private Coroutine startGameRoutine = null;
         private Coroutine grabbedRoutine = null;
         protected override void OnInitialize()
@@ -39,6 +41,13 @@ namespace Assets.Scripts.Somen
                     var direction = (transform.right * moveDirection.x);
                     Move(direction * moveSpeed);
                     Stop();
+                });
+
+            // ソーメンが移動可能範囲外に出ないかを監視
+            this.UpdateAsObservable()
+                .Subscribe(_ =>
+                {
+                    ClampSomenPosition();
                 });
 
             // 箸に当たったとき
@@ -82,6 +91,16 @@ namespace Assets.Scripts.Somen
         public void Stop()
         {
             somenRigidBody.velocity = Vector3.zero;
+        }
+
+        /// <summary>
+        /// 移動範囲を収める
+        /// </summary>
+        private void ClampSomenPosition()
+        {
+            var somenPosition = this.transform.position;
+            somenPosition.x = Mathf.Clamp(somenPosition.x, LIMIT_MOVE_LEFT, LIMIT_MOVE_RIGHT);
+            this.transform.position = new Vector3(somenPosition.x, somenPosition.y, somenPosition.z);
         }
 
         /// <summary>

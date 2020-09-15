@@ -11,10 +11,12 @@ namespace Assets.Scripts.Manager
 
         [SerializeField]
         private float bgmVolume = 0.5f; // BGMの音量
-        AudioSource BGM;
+        private AudioSource BGM;
 
         protected override void OnInitializeManager()
         {
+            BGM = GetComponent<AudioSource>();
+
             Main.CurrentGameState
                 .Where(state => state == GameState.Initialize)
                 .Subscribe(_ =>
@@ -30,7 +32,7 @@ namespace Assets.Scripts.Manager
         
         private void OnInitializeAudio()
         {
-            BGM = GetComponent<AudioSource>();
+            SetBgmVolume(bgmVolume);
             BGM.Play(0);
         }
 
@@ -41,6 +43,7 @@ namespace Assets.Scripts.Manager
         public void SetBgmVolume(float value)
         {
             bgmVolume = value;
+            BGM.volume = bgmVolume;
         }
 
     }

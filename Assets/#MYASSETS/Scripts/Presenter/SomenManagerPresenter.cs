@@ -46,5 +46,11 @@ public class SomenManagerPresenter : MonoBehaviour
                         break;
                 }
             }).AddTo(gameObject);
+        
+        Main.IsPause
+            .Subscribe(isPause =>
+            {
+                somenMove.SetIsPause(isPause);
+            }).AddTo(gameObject);
     }
 }

@@ -18,12 +18,8 @@ namespace Assets.Scripts.Manager
         private ReactiveProperty<bool> isPause = new ReactiveProperty<bool>(false);
         public IReactiveProperty<bool> IsPause { get { return isPause; } }
 
-        private StageManager stageManager;
-
         private void Awake()
         {
-            stageManager = GetComponent<StageManager>();
-
             currentGameState.Subscribe(state => Debug.Log(state));
         }
 

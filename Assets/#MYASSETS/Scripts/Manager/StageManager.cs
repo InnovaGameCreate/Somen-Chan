@@ -96,17 +96,16 @@ namespace Assets.Scripts.Manager
             }
             for (int j = 0; j < createNum * 2; j++)
             {
-                Instantiate(chopsticks, new Vector3(Random.Range(CENTER, RIGHT_RANGE), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.0f), Quaternion.identity, stageObject);
+                Instantiate(chopsticks, new Vector3(Random.Range(CENTER, RIGHT_RANGE), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.2f), Quaternion.identity, stageObject);
                 if (spawnProbability(prob) == true)
                 {
-                    Instantiate(chopsticks, new Vector3(Random.Range(LEFT_RANGE, CENTER), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.0f), Quaternion.Euler(0.0f, 180.0f, 0.0f), stageObject);
+                    Instantiate(chopsticks, new Vector3(Random.Range(LEFT_RANGE, CENTER), j + CHOPSTICK_SPAWN_MERGEN * j + Random.Range(-RAMDOM, RAMDOM), -1.2f), Quaternion.Euler(0.0f, 180.0f, 0.0f), stageObject);
                 }
             }
         }
 
         /// <summary>
         /// ステージオブジェクトをすべて削除
-        /// </summary>
         private void DestroyStageObject()
         {
             foreach (Transform children in stageObject.transform)
@@ -116,7 +115,6 @@ namespace Assets.Scripts.Manager
                     Destroy(children.gameObject);
                 }
             }
-        }
 
         /// <summary>
         /// ステージをスクロールする

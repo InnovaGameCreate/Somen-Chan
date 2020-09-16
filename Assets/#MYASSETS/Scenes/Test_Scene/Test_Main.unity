@@ -774,7 +774,7 @@ MonoBehaviour:
   bamboo: {fileID: 8871317528924902599, guid: 49aaa9ac6fe913d45ba5b03424e379d8, type: 3}
   chopsticks: {fileID: 7614679324460355514, guid: b891e0632c0c61945b80ab5aee4a98e4,
     type: 3}
-  createNum: 20
+  createNum: 40
 --- !u!114 &453380570
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -106,17 +106,15 @@ namespace Assets.Scripts.Manager
 
         /// <summary>
         /// ステージオブジェクトをすべて削除
-        /// </summary>
         private void DestroyStageObject()
         {
             foreach (Transform children in stageObject.transform)
             {
-                if(children.gameObject.name != "WaterFlow")
+                if (children.gameObject.name != "Buket")
                 {
                     Destroy(children.gameObject);
                 }
             }
-        }
 
         /// <summary>
         /// ステージをスクロールする

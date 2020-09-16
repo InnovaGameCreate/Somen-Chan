@@ -15,6 +15,8 @@ namespace Assets.Scripts.Somen
         private Vector3 tmpSomenPosition;
         private bool isGrabbed = false;
         public bool IsGrabbed { get { return isGrabbed; } }
+        private bool isPause = false;
+        public bool IsPause { get { return isPause; } }
         private const float LIMIT_MOVE_RIGHT = 1.5f;    // 右側の移動限界位置
         private const float LIMIT_MOVE_LEFT = -1.5f;    // 左側の移動限界位置
         private Coroutine startGameRoutine = null;
@@ -35,7 +37,7 @@ namespace Assets.Scripts.Somen
 
             // 左右方向の移動
             InputEvent.MoveDirection
-                .Where(_ => core.IsAlive.Value && !isGrabbed)
+                .Where(_ => core.IsAlive.Value && !isGrabbed && !isPause)
                 .Where(_ => core.CurrentGameState == GameState.Main)
                 .Subscribe(moveDirection =>
                 {
@@ -169,6 +171,7 @@ namespace Assets.Scripts.Somen
             grabbedRoutine = null;
             core.SetIsAlive(false);
             isGrabbed = false;
+            isPause = false;
         }
 
         /// <summary>
@@ -190,6 +193,11 @@ namespace Assets.Scripts.Somen
         public void SetIsGrabbed(bool isGrabbed)
         {
             this.isGrabbed = isGrabbed;
+        }
+
+        public void SetIsPause(bool isPause)
+        {
+            this.isPause = isPause;
         }
     }
 }

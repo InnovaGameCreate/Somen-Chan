@@ -10,9 +10,22 @@ public class ModalManagerPresenter : MonoBehaviour
     private MainGameManager mainGameManager = default;
     [SerializeField]
     private ModalView modalView = default;
-
+    
     private void Start()
     {
+        mainGameManager.CurrentGameState
+            .Subscribe(state => 
+            {
+                switch (state)
+                {
+                    case GameState.GameOver:
+                        
+                        break;
+                    default:
+                        break;
+                }
+            });
+
         mainGameManager.IsPause
             .Subscribe(isPause =>
             {

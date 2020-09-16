@@ -11,7 +11,7 @@ namespace Assets.Scripts.Manager
     {
         [SerializeField]
         private Transform stageObject = default;
-        private const float SCROLL_SPEED = 0.03f;
+        private const float SCROLL_SPEED = 0.08f;
         private ChopStickProvider chopStickProvider;
 
         #region ステージ生成関係

@@ -8,9 +8,8 @@ namespace Assets.Scripts.Manager
 {
     public class AudioManager : BaseManager
     {
-
-        [SerializeField]
-        private float bgmVolume = 0.5f; // BGMの音量
+        private ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(1.0f);
+        public IReadOnlyReactiveProperty<float> BGMVolume { get { return bgmVolume; } }
         private AudioSource BGM;
 
         protected override void OnInitializeManager()
@@ -23,16 +22,21 @@ namespace Assets.Scripts.Manager
                 {
                     OnInitializeAudio();
                 });
+
+            this.UpdateAsObservable()
+                .Subscribe(_ =>
+                {
+                    ClampBgmVolume();
+                });
         }
 
         /// <summary>
         /// オーディオ関係の初期化
         /// </summary>
         /// 
-        
+
         private void OnInitializeAudio()
         {
-            SetBgmVolume(bgmVolume);
             BGM.Play(0);
         }
 
@@ -42,9 +46,15 @@ namespace Assets.Scripts.Manager
         /// <param name="value">BGMの音量(float:0-1)</param>
         public void SetBgmVolume(float value)
         {
-            bgmVolume = value;
-            BGM.volume = bgmVolume;
+            bgmVolume.Value += value;
+            BGM.volume += value;
         }
 
+        private void ClampBgmVolume()
+        {
+            var volume = this.bgmVolume.Value;
+            volume = Mathf.Clamp(volume, 0.0f, 1.0f);
+            this.bgmVolume.Value = volume;
+        }
     }
 }

@@ -49,7 +49,6 @@ namespace Assets.Scripts.Somen
                 .Subscribe(_ =>
                 {
                     ClampSomenPosition();
-                    Debug.Log(isGrabbed);
                 });
 
             // 箸に当たったとき

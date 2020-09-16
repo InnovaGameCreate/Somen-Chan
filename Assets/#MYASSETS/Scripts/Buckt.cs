@@ -1,22 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Assets.Scripts.Somen;
+using System.Collections;
 using UniRx;
 using UniRx.Triggers;
-using Assets.Scripts.Somen;
+using UnityEngine;
 
 public class Buckt : MonoBehaviour
 {
+    private Rigidbody rb;
     private void Start()
     {
-        this.OnTriggerEnterAsObservable()
-            .Subscribe(somen =>
-            {
-                var i = somen.GetComponent<SomenCore>();
-                if (i != null)
-                {
 
-                }
-            });
     }
 }

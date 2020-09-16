@@ -111,7 +111,10 @@ namespace Assets.Scripts.Manager
         {
             foreach (Transform children in stageObject.transform)
             {
-                Destroy(children.gameObject);
+                if (children.gameObject.name != "Buket")
+                {
+                    Destroy(children.gameObject);
+                }
             }
         }
 

@@ -55,39 +55,60 @@ namespace Assets.Scripts.Somen
                 {
                     ClampSomenPosition();
                 });
-
+           
             // 箸に当たったとき
             this.OnTriggerEnterAsObservable()
                 .Subscribe(chopStick =>
                 {
-                    var i = chopStick.transform.parent.gameObject
-                                     .transform.parent.gameObject
-                                     .transform.parent.gameObject
-                                     .transform.parent.gameObject
-                                     .transform.parent.gameObject
-                                     .GetComponent<BaseChopStick>();
-                    if (i != null)
+                    if (chopStick.name != "Buket")
                     {
-                        i.SwitchOnIsGrab();                         // 掴まれたフラグをオンに
-                        isGrabbed = i.IsGrab.Value;
-                        Stop();                                     // プレイヤーを止まらせる
-                        var chopstickPosition = i.GrabSomen();      // 箸のコライダーを消す&掴まれる
-                        tmpSomenPosition = transform.position;
-                        this.transform.position = new Vector3(chopstickPosition.x, chopstickPosition.y, transform.position.z);
-                        if (grabbedRoutine == null)
+                        var i = chopStick.transform.parent.gameObject
+                                         .transform.parent.gameObject
+                                         .transform.parent.gameObject
+                                         .transform.parent.gameObject
+                                         .transform.parent.gameObject
+                                         .GetComponent<BaseChopStick>();
+                        if (i != null)
                         {
-                            somenSound.ShotSE();
-                            grabbedRoutine = StartCoroutine(GrabbedCoroutine(i));
+                            i.SwitchOnIsGrab();                         // 掴まれたフラグをオンに
+                            isGrabbed = i.IsGrab.Value;
+                            Stop();                                     // プレイヤーを止まらせる
+                            var chopstickPosition = i.GrabSomen();      // 箸のコライダーを消す&掴まれる
+                            tmpSomenPosition = transform.position;
+                            this.transform.position = new Vector3(chopstickPosition.x, chopstickPosition.y, transform.position.z);
+                            if (grabbedRoutine == null)
+                            {
+                                somenSound.ShotSE();
+                                grabbedRoutine = StartCoroutine(GrabbedCoroutine(i));
+                            }
                         }
                     }
+
+                    else
+                    {
+                        var j = chopStick.GetComponent<Buckt>();
+                        if (j != null)
+                        {
+                            StartCoroutine(ResetGravity());
+                        }
+                    }                   
                 });
+               
         }
 
-        /// <summary>
-        /// 移動
-        /// </summary>
-        /// <param name="direction">移動方向</param>
-        private void Move(Vector3 direction)
+        private IEnumerator ResetGravity()
+        {
+            somenRigidBody.useGravity = true;
+            yield return new WaitForSeconds(1.5f);
+            somenRigidBody.useGravity = false;
+            Stop();
+        }
+
+    /// <summary>
+    /// 移動
+    /// </summary>
+    /// <param name="direction">移動方向</param>
+    private void Move(Vector3 direction)
         {
             somenRigidBody.AddForce(direction, ForceMode.Impulse);
         }
@@ -130,7 +151,7 @@ namespace Assets.Scripts.Somen
                 if (time < elapsedTime)
                 {
                     core.SetIsAlive(true);   // isAliveのフラグ切り替え
-                    Move(transform.forward * startForce);   // 前方方向にスタート時に加える
+                    //Move(transform.forward * startForce);   // 前方方向にスタート時に加える
                     Stop();
                     startGameRoutine = null;
                     yield break;

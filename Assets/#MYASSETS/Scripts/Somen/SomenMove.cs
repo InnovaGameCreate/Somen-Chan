@@ -21,8 +21,11 @@ namespace Assets.Scripts.Somen
         private const float LIMIT_MOVE_LEFT = -1.5f;    // 左側の移動限界位置
         private Coroutine startGameRoutine = null;
         private Coroutine grabbedRoutine = null;
+        private SomenSound somenSound;
         protected override void OnInitialize()
         {
+            somenSound = GetComponent<SomenSound>();
+
             // ゲーム開始時の動き
             InputEvent.MoveDirection
                 .Where(_ => !core.IsAlive.Value)
@@ -73,6 +76,7 @@ namespace Assets.Scripts.Somen
                         this.transform.position = new Vector3(chopstickPosition.x, chopstickPosition.y, transform.position.z);
                         if (grabbedRoutine == null)
                         {
+                            somenSound.ShotSE();
                             grabbedRoutine = StartCoroutine(GrabbedCoroutine(i));
                         }
                     }

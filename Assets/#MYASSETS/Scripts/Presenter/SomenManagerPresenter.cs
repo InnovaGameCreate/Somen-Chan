@@ -17,6 +17,7 @@ public class SomenManagerPresenter : MonoBehaviour
     {
         var core = somen.GetComponent<SomenCore>();
         var somenMove = somen.GetComponent<SomenMove>();
+        var somenSound = somen.GetComponent<SomenSound>();
 
         core.IsAlive
             .Where(isAlive => isAlive)

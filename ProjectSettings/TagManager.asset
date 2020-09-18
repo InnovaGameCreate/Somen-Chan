@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - StageObject
+  - Buket
+  - ChopStick
   layers:
   - Default
   - TransparentFX

@@ -8,6 +8,8 @@ public class GameClearModalManagerPresenter : MonoBehaviour
 {
     [SerializeField]
     private MainGameManager mainGameManager = default;
+    [SerializeField]
+    private Buckt buckt = default;
     private GameClearModalView GameClearModalView;
 
     private void Start()
@@ -20,11 +22,20 @@ public class GameClearModalManagerPresenter : MonoBehaviour
                 if (state == GameState.GameClear)
                 {
                     GameClearModalView.ShowModal();
+                    buckt.ResetBuketPosition();
                 }
                 else
                 {
                     GameClearModalView.CloseModal();
+                    buckt.SetIsClear(false);
                 }
+            });
+
+        buckt.IsClear
+            .Where(isClear => isClear)
+            .Subscribe(_ =>
+            {
+                SetCurrentGameState(GameState.GameClear);
             });
     }
 

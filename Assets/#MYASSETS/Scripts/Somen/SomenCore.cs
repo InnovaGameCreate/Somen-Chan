@@ -13,11 +13,13 @@ namespace Assets.Scripts.Somen
         private GameState currentGameState;
         public GameState CurrentGameState { get { return currentGameState; } }
         private Vector3 startSomenPositin;
+        private Quaternion startSomenRotation;
 
         private void Awake()
         {
             currentGameState = GameState.Initialize;
             startSomenPositin = this.transform.position;
+            startSomenRotation = this.transform.rotation;
         }
 
         /// <summary>
@@ -26,6 +28,7 @@ namespace Assets.Scripts.Somen
         public void ResetSomenPosition()
         {
             this.transform.position = startSomenPositin;
+            this.transform.rotation = startSomenRotation;
         }
 
         /// <summary>

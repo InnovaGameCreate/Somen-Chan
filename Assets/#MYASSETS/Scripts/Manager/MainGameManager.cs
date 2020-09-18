@@ -20,7 +20,7 @@ namespace Assets.Scripts.Manager
 
         private void Awake()
         {
-            currentGameState.Subscribe(state => Debug.Log(state));
+            //currentGameState.Subscribe(state => Debug.Log(state));
         }
 
         /// <summary>

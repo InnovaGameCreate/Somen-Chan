@@ -21,6 +21,7 @@ namespace Assets.Scripts.Somen
         private const float LIMIT_MOVE_LEFT = -1.5f;    // 左側の移動限界位置
         private Coroutine startGameRoutine = null;
         private Coroutine grabbedRoutine = null;
+        private Coroutine gravityRoutine = null;
         private SomenSound somenSound;
         protected override void OnInitialize()
         {
@@ -55,14 +56,14 @@ namespace Assets.Scripts.Somen
                 {
                     ClampSomenPosition();
                 });
-           
+
             // 箸に当たったとき
             this.OnTriggerEnterAsObservable()
-                .Subscribe(chopStick =>
+                .Subscribe(col =>
                 {
-                    if (chopStick.name != "Buket")
+                    if (col.gameObject.tag == "ChopStick")
                     {
-                        var i = chopStick.transform.parent.gameObject
+                        var i = col.transform.parent.gameObject
                                          .transform.parent.gameObject
                                          .transform.parent.gameObject
                                          .transform.parent.gameObject
@@ -83,32 +84,35 @@ namespace Assets.Scripts.Somen
                             }
                         }
                     }
-
-                    else
+                    else if (col.gameObject.tag == "Buket")
                     {
-                        var j = chopStick.GetComponent<Buckt>();
+                        var j = col.GetComponent<Buckt>();
                         if (j != null)
                         {
-                            StartCoroutine(ResetGravity());
+                            if (gravityRoutine == null)
+                            {
+                                gravityRoutine = StartCoroutine(SwitchGravity(j));
+                            }
                         }
-                    }                   
+                    }
                 });
-               
         }
 
-        private IEnumerator ResetGravity()
+        private IEnumerator SwitchGravity(Buckt buckt)
         {
             somenRigidBody.useGravity = true;
             yield return new WaitForSeconds(1.5f);
             somenRigidBody.useGravity = false;
             Stop();
+            gravityRoutine = null;
+            buckt.SetIsClear(true);
         }
 
-    /// <summary>
-    /// 移動
-    /// </summary>
-    /// <param name="direction">移動方向</param>
-    private void Move(Vector3 direction)
+        /// <summary>
+        /// 移動
+        /// </summary>
+        /// <param name="direction">移動方向</param>
+        private void Move(Vector3 direction)
         {
             somenRigidBody.AddForce(direction, ForceMode.Impulse);
         }
@@ -119,6 +123,7 @@ namespace Assets.Scripts.Somen
         public void Stop()
         {
             somenRigidBody.velocity = Vector3.zero;
+            somenRigidBody.angularVelocity = Vector3.zero;
         }
 
         /// <summary>
@@ -151,7 +156,7 @@ namespace Assets.Scripts.Somen
                 if (time < elapsedTime)
                 {
                     core.SetIsAlive(true);   // isAliveのフラグ切り替え
-                    //Move(transform.forward * startForce);   // 前方方向にスタート時に加える
+                    Move(transform.forward * startForce);   // 前方方向にスタート時に加える
                     Stop();
                     startGameRoutine = null;
                     yield break;

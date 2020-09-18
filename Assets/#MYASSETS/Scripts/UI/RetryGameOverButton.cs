@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RetryButton : MonoBehaviour
+public class RetryGameOverButton : MonoBehaviour
 {
-    private GameClearModalManagerPresenter modalPresenter;
+    private GameOverModalManagerPresenter modalPresenter;
     private void Start()
     {
-        modalPresenter = GetComponentInParent<GameClearModalManagerPresenter>();
+        modalPresenter = GetComponentInParent<GameOverModalManagerPresenter>();
     }
 
     public void OnClick()

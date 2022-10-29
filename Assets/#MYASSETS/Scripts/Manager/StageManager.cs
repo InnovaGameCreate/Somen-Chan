@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using Assets.Scripts.ChopStick;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Manager
 {
@@ -11,8 +13,10 @@ namespace Assets.Scripts.Manager
     {
         [SerializeField]
         private Transform stageObject = default;
-        private const float SCROLL_SPEED = 0.08f;
+        private const float SCROLL_SPEED = 0.16f;
         private ChopStickProvider chopStickProvider;
+
+        private float ElapsedTime { get; set; } = 0.0f;
 
         #region ステージ生成関係
         [SerializeField]
@@ -41,19 +45,21 @@ namespace Assets.Scripts.Manager
                     {
                         case GameState.Initialize:
                             OnInitializeStageObject();
+                            ElapsedTime = 0.0f;
                             break;
                         case GameState.GameOver:
                             chopStickProvider.SetIsGrab(false);
                             break;
                     }
                 });
-
+            
             // スクロールをする
             this.UpdateAsObservable()
                 .Where(_ => Main.CurrentGameState.Value == GameState.Main && !Main.IsPause.Value)
                 .Where(_ => !chopStickProvider.IsGrab.Value)
                 .Subscribe(_ =>
                 {
+                    ElapsedTime += Time.deltaTime;
                     ScrollStage(SCROLL_SPEED);
                 });
         }
@@ -123,7 +129,8 @@ namespace Assets.Scripts.Manager
         /// <param name="scrollSpeed">スクロールのスピード</param>
         private void ScrollStage(float scrollSpeed)
         {
-            stageObject.transform.position -= new Vector3(0.0f, scrollSpeed, 0.0f);
+            var power = ElapsedTime >= 60 ? 1.5f : 1.0f;
+            stageObject.transform.position -= new Vector3(0.0f, power * scrollSpeed, 0.0f);
         }
     }
 }
